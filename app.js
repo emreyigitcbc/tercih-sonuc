@@ -6,12 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const nameInput = document.getElementById('name-input');
   const clearBtn = document.getElementById('clear-btn');
   const queryBtn = document.getElementById('query-btn');
-  const autocompleteList = document.getElementById('autocomplete-list');
   const loadingSection = document.getElementById('query-loading');
   const resultSection = document.getElementById('result-section');
-  const rosterModal = document.getElementById('roster-modal');
-  const openRosterBtn = document.getElementById('open-roster-btn');
-  const closeRosterBtn = document.getElementById('close-roster-btn');
   const soundToggleBtn = document.getElementById('sound-toggle-btn');
   const printDocBtn = document.getElementById('print-doc-btn');
   const repeatConfettiBtn = document.getElementById('repeat-confetti-btn');
@@ -21,26 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
   nameInput.addEventListener('input', () => {
     const val = nameInput.value.trim();
     clearBtn.style.display = val ? 'flex' : 'none';
-    showAutocomplete(val);
   });
 
   clearBtn.addEventListener('click', () => {
     nameInput.value = '';
     clearBtn.style.display = 'none';
-    autocompleteList.style.display = 'none';
     nameInput.focus();
   });
 
   nameInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      autocompleteList.style.display = 'none';
       executeQuery(nameInput.value.trim());
     }
   });
 
   queryBtn.addEventListener('click', () => {
-    autocompleteList.style.display = 'none';
     executeQuery(nameInput.value.trim());
   });
 
@@ -77,49 +69,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Modal events
-  if (openRosterBtn) {
-    openRosterBtn.addEventListener('click', () => {
-      openModal();
-    });
-  }
-
-  if (closeRosterBtn) {
-    closeRosterBtn.addEventListener('click', () => {
-      closeModal();
-    });
-  }
-
-  rosterModal.addEventListener('click', (e) => {
-    if (e.target === rosterModal) closeModal();
-  });
-
-  // Quick Chips
-  document.querySelectorAll('.chip-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const queryName = btn.getAttribute('data-name');
-      if (queryName) {
-        nameInput.value = queryName;
-        clearBtn.style.display = 'flex';
-        executeQuery(queryName);
-      }
-    });
-  });
-
-  // Setup Modal Tabs
-  setupModalTabs();
-
-  // Search Normalization Helper
+  // Bulletproof Turkish-character and Case Insensitive Normalizer
   function normalize(str) {
     if (!str) return '';
     return str
-      .toLowerCase()
+      .replace(/İ/g, 'i')
+      .replace(/I/g, 'ı')
+      .toLocaleLowerCase('tr-TR')
+      .replace(/ı/g, 'i')
       .replace(/ğ/g, 'g')
       .replace(/ü/g, 'u')
       .replace(/ş/g, 's')
-      .replace(/ı/g, 'i')
       .replace(/ö/g, 'o')
       .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9]/g, ' ')
+      .replace(/\s+/g, ' ')
       .trim();
   }
 
@@ -128,11 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!query) return null;
     const normQuery = normalize(query);
 
-    // 1. Exact match
+    // 1. Exact normalized match
     let match = TEAM_MEMBERS.find(m => normalize(m.name) === normQuery);
     if (match) return match;
 
-    // 2. Search terms match
+    // 2. Search terms exact match
     match = TEAM_MEMBERS.find(m => {
       if (m.searchTerms && m.searchTerms.some(term => normalize(term) === normQuery)) return true;
       return false;
@@ -148,48 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return match || null;
   }
 
-  // Autocomplete
-  function showAutocomplete(val) {
-    if (!val || val.length < 2) {
-      autocompleteList.style.display = 'none';
-      return;
-    }
-
-    const norm = normalize(val);
-    const matches = TEAM_MEMBERS.filter(m => {
-      if (normalize(m.name).includes(norm)) return true;
-      if (m.searchTerms && m.searchTerms.some(t => normalize(t).includes(norm))) return true;
-      return false;
-    }).slice(0, 6);
-
-    if (matches.length === 0) {
-      autocompleteList.style.display = 'none';
-      return;
-    }
-
-    autocompleteList.innerHTML = '';
-    matches.forEach(m => {
-      const item = document.createElement('div');
-      item.className = 'autocomplete-item';
-      const rolePreview = m.placements.map(p => p.role).join(', ');
-      item.innerHTML = `
-        <div class="name-wrap">
-          <span>${m.avatar}</span>
-          <span>${m.name}</span>
-        </div>
-        <span class="team-tag">${m.placements.length > 1 ? m.placements.length + ' Takımda' : m.placements[0].team}</span>
-      `;
-      item.addEventListener('click', () => {
-        nameInput.value = m.name;
-        clearBtn.style.display = 'flex';
-        autocompleteList.style.display = 'none';
-        executeQuery(m.name);
-      });
-      autocompleteList.appendChild(item);
-    });
-    autocompleteList.style.display = 'block';
-  }
-
   // Execute Query
   function executeQuery(name) {
     if (!name) {
@@ -198,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Show loading for dramatic comedic suspense
     loadingSection.style.display = 'block';
     resultSection.style.display = 'none';
     loadingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -213,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (member) {
         confetti.burst(180);
       }
-    }, 450);
+    }, 380);
   }
 
   // Barcode generator SVG
@@ -245,10 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
       : `YLD-2026-RET-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
     if (!member) {
-      // Not found rejection document
+      // Rejection Document
       docContainer.innerHTML = `
         <div class="osym-document-wrapper">
-          <!-- Document Header -->
           <div class="doc-header">
             <div class="doc-header-left">
               <div class="turkish-emblem">🇹🇷</div>
@@ -264,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <!-- Candidate Details -->
           <div class="doc-candidate-grid">
             <div class="candidate-photo-box">
               <div class="photo-avatar">🥲</div>
@@ -295,25 +214,22 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
           </div>
 
-          <!-- Placement Notification Banner -->
           <div class="placement-banner failure">
             <div class="status-badge">SONUÇ BİLDİRİMİ</div>
             <div class="banner-heading">HERHANGİ BİR PROGRAMA YERLEŞEMEDİNİZ! 🥲</div>
-            <div class="banner-subtext">2026 TEKNOFEST Yıldırım Roket Takımı taban yerleştirme puanının (560.000) altında kaldınız.</div>
+            <div class="banner-subtext">2026 TEKNOFEST Yıldırım Roket Takımı taban yerleştirme puanının altında kaldınız.</div>
           </div>
 
-          <!-- Witty Committee Note -->
           <div class="jury-note-card" style="border-left-color: #dc2626; background: #fff1f2;">
             <div class="jury-note-header" style="color: #991b1b;">
               <span>☕</span>
-              <span>YSYM TESELLİ VE MORAL KOMİTESİ NOTU</span>
+              <span>YSYM TESELLİ NOTU</span>
             </div>
             <div class="jury-comment" style="color: #881337;">
-              "Üzülmeyiniz! Roketimiz göğe fırlatılırken tribünden alkışlamak ve atölyemize sıcak simit-çay kapıp gelmek için kontenjanımız sınırsızdır! İsminizi yanlış yazmış olma ihtimalinize karşı aşağıdaki listeden takım üyelerimizi kontrol edebilirsiniz."
+              "Üzülmeyiniz! Atölyemize sıcak simit-çay kapıp gelmek için kontenjanımız sınırsızdır. İsminizi doğru yazdığınızdan emin olup tekrar sorgulayabilirsiniz."
             </div>
           </div>
 
-          <!-- Security Footer -->
           <div class="doc-security-footer">
             <div class="barcode-wrap">
               ${generateBarcodeSVG(authCode)}
@@ -337,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Found Candidate
     const isMulti = member.placements.length > 1;
-    const placementRows = member.placements.map((p, idx) => `
+    const placementRows = member.placements.map(p => `
       <tr>
         <td style="font-family: monospace; font-weight: bold; color: #475569;">${p.code || 'ROK-2026'}</td>
         <td>
@@ -368,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     docContainer.innerHTML = `
       <div class="osym-document-wrapper">
-        <!-- Document Header -->
         <div class="doc-header">
           <div class="doc-header-left">
             <div class="turkish-emblem">🇹🇷</div>
@@ -384,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
 
-        <!-- Candidate Profile Grid -->
         <div class="doc-candidate-grid">
           <div class="candidate-photo-box">
             <div class="photo-avatar">${member.avatar || '🚀'}</div>
@@ -419,7 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </table>
         </div>
 
-        <!-- Placement Notification Banner -->
         <div class="placement-banner ${isMulti ? 'multi' : 'success'}">
           <div class="status-badge">${isMulti ? '🚨 ÇOKLU YERLEŞTİRME TESPİT EDİLDİ' : 'TEBRİKLER'}</div>
           <div class="banner-heading">
@@ -436,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ${workloadHTML}
 
-        <!-- Detailed Placements Table -->
         <div class="placements-table-container">
           <div class="section-title-bar">
             <span>📋 YERLEŞTİĞİ TAKIM VE GÖREV DETAYLARI</span>
@@ -460,7 +372,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
 
-        <!-- Witty Jury Card -->
         <div class="jury-note-card">
           <div class="jury-note-header">
             <span>🎯</span>
@@ -474,7 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
 
-        <!-- Official Legalistic-Satirical Guidelines -->
         <div class="doc-rules-box">
           <div class="rules-title">ADAYIN DİKKATİNE & İNTİBAK KURALLARI:</div>
           <ol>
@@ -486,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </ol>
         </div>
 
-        <!-- Document Security Footer -->
         <div class="doc-security-footer">
           <div class="barcode-wrap">
             ${generateBarcodeSVG(authCode)}
@@ -506,87 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
-  }
-
-  // Setup Modal Tabs
-  function setupModalTabs() {
-    const tabsContainer = document.getElementById('modal-tabs');
-    const rosterGrid = document.getElementById('roster-grid');
-
-    const tabs = [
-      { id: 'all', name: 'Tümü (26 Kişi)' },
-      { id: 'ROKET - ORTA İRTİFA', name: '🚀 Roket - Orta İrtifa (15)' },
-      { id: 'MODEL UYDU', name: '🛰️ Model Uydu (5)' },
-      { id: 'SU ALTI ROKETİ', name: '🌊 Su Altı Roketi (13)' },
-      { id: 'SPONSORLUK & SOSYAL MEDYA', name: '📢 Medya & Sponsorluk (4)' }
-    ];
-
-    tabsContainer.innerHTML = '';
-    tabs.forEach((tab, index) => {
-      const btn = document.createElement('button');
-      btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
-      btn.textContent = tab.name;
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        filterRoster(tab.id);
-      });
-      tabsContainer.appendChild(btn);
-    });
-
-    renderRosterGrid(TEAM_MEMBERS);
-
-    function filterRoster(filterId) {
-      if (filterId === 'all') {
-        renderRosterGrid(TEAM_MEMBERS);
-      } else {
-        const filtered = TEAM_MEMBERS.filter(m => m.placements.some(p => p.team === filterId));
-        renderRosterGrid(filtered, filterId);
-      }
-    }
-
-    function renderRosterGrid(members, activeTeam = null) {
-      rosterGrid.innerHTML = '';
-      members.forEach(m => {
-        const card = document.createElement('div');
-        card.className = 'roster-card';
-        let dutyText = '';
-        if (activeTeam) {
-          const matchedDuty = m.placements.find(p => p.team === activeTeam);
-          dutyText = matchedDuty ? `${matchedDuty.role} (${matchedDuty.department})` : '';
-        } else {
-          dutyText = m.placements.map(p => p.role).join(', ');
-        }
-
-        card.innerHTML = `
-          <div class="avatar">${m.avatar}</div>
-          <div class="info">
-            <div class="name">${m.name}</div>
-            <div class="duty">${dutyText}</div>
-          </div>
-          ${m.placements.length > 1 ? `<span class="count-pill">${m.placements.length} Takım</span>` : ''}
-        `;
-
-        card.addEventListener('click', () => {
-          closeModal();
-          nameInput.value = m.name;
-          clearBtn.style.display = 'flex';
-          executeQuery(m.name);
-        });
-
-        rosterGrid.appendChild(card);
-      });
-    }
-  }
-
-  function openModal() {
-    rosterModal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    rosterModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
   }
 
   function escapeHTML(str) {
