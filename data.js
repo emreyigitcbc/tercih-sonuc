@@ -1,4 +1,4 @@
-// 2026 TEKNOFEST Yıldırım Roket Takımı Üye ve Yerleştirme Veritabanı
+// 2026 TEKNOFEST Yıldırım Takımları Üye ve Yerleştirme Veritabanı
 const TEAMS_INFO = {
   "ROKET - ORTA İRTİFA": {
     name: "ROKET - ORTA İRTİFA",
@@ -214,8 +214,8 @@ const TEAM_MEMBERS = [
   },
   {
     id: 11,
-    name: "Alime Erva",
-    searchTerms: ["alime", "erva", "alime erva"],
+    name: "Alime Erva Koç",
+    searchTerms: ["alime", "erva", "koc", "koç", "alime erva", "alime erva koc", "alime erva koç", "alime koc"],
     tc: "1923******11",
     score: "579.400",
     rank: 11,
@@ -223,7 +223,7 @@ const TEAM_MEMBERS = [
     badge: "🔌 DONANIM VE DEVRE USTASI",
     avatar: "🔌",
     workload: 83,
-    joke: "Multimetre elinde, osiloskop kalbinde! Devre kartları Alime'nin elinde adeta sanat eserine dönüşüyor.",
+    joke: "Multimetre elinde, osiloskop kalbinde! Devre kartları Alime Erva'nın elinde adeta sanat eserine dönüşüyor.",
     advice: "Kısa devre ihtimalini kokusundan 50 metre öteden sezer.",
     placements: [
       { team: "ROKET - ORTA İRTİFA", role: "Aviyonik Üyesi", department: "Donanım Birimi", status: "1. Tercihine Asil Yerleşti", code: "ROK-07-AVD" }
@@ -342,7 +342,7 @@ const TEAM_MEMBERS = [
     badge: "🎯 RAMPANIN GÖZ BEBEĞİ",
     avatar: "🎯",
     workload: 83,
-    joke: "Son cıvata sıkılana, roket rampaya dikilene kadar atölyeden çıkmayan gerçek fedakar roketçi!",
+    joke: "Son cıvata sıkılana, roket rampaya dikilene kadar atölyeden çıkmayan gerçek fedakar Yıldırım mühendisi!",
     advice: "Epoksi kokusu onun için parfümden daha değerlidir.",
     placements: [
       { team: "ROKET - ORTA İRTİFA", role: "Mekanik Üyesi", department: "Mekanik Birimi", status: "1. Tercihine Asil Yerleşti", code: "ROK-15-MKU" }
@@ -384,8 +384,8 @@ const TEAM_MEMBERS = [
   },
   {
     id: 21,
-    name: "Ayşenaz Zenger",
-    searchTerms: ["aysenaz", "ayşenaz", "zenger", "ayşenaz zenger", "aysenaz zenger"],
+    name: "Ayşenaz Çağla Zenger",
+    searchTerms: ["aysenaz", "ayşenaz", "cagla", "çağla", "zenger", "ayşenaz çağla zenger", "aysenaz cagla zenger", "ayşenaz zenger", "aysenaz zenger"],
     tc: "1923******21",
     score: "569.900",
     rank: 21,
@@ -452,8 +452,8 @@ const TEAM_MEMBERS = [
   },
   {
     id: 25,
-    name: "A. Mert Yeğen",
-    searchTerms: ["mert", "yegen", "yeğen", "mert yeğen", "mert yegen", "a mert yegen", "a. mert yeğen", "ahmet mert"],
+    name: "Ali Mert Yeğen",
+    searchTerms: ["ali", "mert", "yegen", "yeğen", "ali mert", "ali mert yeğen", "ali mert yegen", "mert yeğen", "mert yegen", "a mert yegen", "a. mert yeğen"],
     tc: "1923******25",
     score: "565.350",
     rank: 25,
@@ -479,7 +479,7 @@ const TEAM_MEMBERS = [
     avatar: "📢",
     workload: 86,
     joke: "Takıma bütçe, Instagram'a rekor like, Yıldırım'a sponsor yağdıran halkla ilişkiler sihirbazı! Hikaye atmadan fırlatma yapılamaz.",
-    advice: "Kamerayı gördüğü anda roketin en havalı açısını yakalar ve viral yapar.",
+    advice: "Kamerayı gördüğü anda en havalı açıyı yakalar ve viral yapar.",
     placements: [
       { team: "SPONSORLUK & SOSYAL MEDYA", role: "Ekip Üyesi", department: "İletişim & Sosyal Medya", status: "1. Tercihine Asil Yerleşti", code: "MED-02-MED" }
     ]

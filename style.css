@@ -368,7 +368,7 @@ body {
 
 /* Watermark */
 .osym-document-wrapper::before {
-  content: "TEKNOFEST YILDIRIM ROKET TAKIMI";
+  content: "TEKNOFEST YILDIRIM TAKIMI";
   position: absolute;
   top: 50%;
   left: 50%;

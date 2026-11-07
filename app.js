@@ -1,4 +1,4 @@
-// TEKNOFEST Yıldırım Roket Takımı - ÖSYM Tercih Açıklama Sistemi
+// TEKNOFEST Yıldırım Takımı - ÖSYM Tercih Açıklama Sistemi
 
 (function () {
   'use strict';
@@ -214,7 +214,7 @@
                 <div class="exam-title">2026-TEKNOFEST YILDIRIM TAKIMLARI YERLEŞTİRME SONUÇ BELGESİ</div>
               </div>
               <div class="doc-header-right">
-                <img src="logo.png" alt="Yıldırım Roket Takımı Logo" class="doc-logo" />
+                <img src="logo.png" alt="Yıldırım Takımı Logo" class="doc-logo" />
               </div>
             </div>
 
@@ -251,7 +251,7 @@
             <div class="placement-banner failure">
               <div class="status-badge">SONUÇ BİLDİRİMİ</div>
               <div class="banner-heading">HERHANGİ BİR PROGRAMA YERLEŞEMEDİNİZ! 🥲</div>
-              <div class="banner-subtext">2026 TEKNOFEST Yıldırım Roket Takımı taban yerleştirme puanının altında kaldınız.</div>
+              <div class="banner-subtext">2026 TEKNOFEST Yıldırım Takımı taban yerleştirme puanının altında kaldınız.</div>
             </div>
 
             <div class="jury-note-card" style="border-left-color: #dc2626; background: #fff1f2;">
@@ -275,7 +275,7 @@
               </div>
               <div class="official-red-stamp" style="border-color:#dc2626; color:#dc2626;">
                 <span>YILDIRIM</span>
-                <span>ROKET</span>
+                <span>TAKIMI</span>
                 <span>RED</span>
                 <span>2026</span>
               </div>
@@ -289,7 +289,7 @@
       const isMulti = member.placements.length > 1;
       const placementRows = member.placements.map(p => `
         <tr>
-          <td style="font-family: monospace; font-weight: bold; color: #475569;">${p.code || 'ROK-2026'}</td>
+          <td style="font-family: monospace; font-weight: bold; color: #475569;">${p.code || 'YLD-2026'}</td>
           <td>
             <span class="team-badge">
               ${(typeof TEAMS_INFO !== 'undefined' && TEAMS_INFO[p.team]) ? TEAMS_INFO[p.team].icon : '🚀'} ${p.team}
@@ -316,6 +316,11 @@
         </div>
       ` : '';
 
+      // Clean placement text according to user request
+      const placementSubtext = isMulti
+        ? 'Tebrikler! Üstün yetenek ve hiperaktiviteniz dolayısıyla birden çok masada yetkilendirildiniz.'
+        : `2026 Teknofest maratonunda Yıldırım Takımı bünyesindeki <strong>${member.placements[0].team}</strong> kadrosuna dahil oldunuz.`;
+
       docContainer.innerHTML = `
         <div class="osym-document-wrapper">
           <div class="doc-header">
@@ -329,7 +334,7 @@
               <div class="exam-title">2026-TEKNOFEST YILDIRIM TAKIMLARI YERLEŞTİRME SONUÇ BELGESİ</div>
             </div>
             <div class="doc-header-right">
-              <img src="logo.png" alt="Yıldırım Roket Takımı Logo" class="doc-logo" />
+              <img src="logo.png" alt="Yıldırım Takımı Logo" class="doc-logo" />
             </div>
           </div>
 
@@ -362,7 +367,7 @@
               </tr>
               <tr>
                 <th>KONTENJAN TÜRÜ</th>
-                <td>${isMulti ? '⭐ Süper Roketçi / Çoklu Kadro' : 'Teknofest Roketçi Asil Kontenjanı'}</td>
+                <td>${isMulti ? '⭐ Yıldırım Süper Kadro / Çoklu Görev' : 'Yıldırım Takımı Asil Kontenjanı'}</td>
               </tr>
             </table>
           </div>
@@ -372,12 +377,10 @@
             <div class="banner-heading">
               ${isMulti 
                 ? `BİRDEN FAZLA TAKIMA ASİL OLARAK YERLEŞTİNİZ! (${member.placements.length} AYRI GÖREV)` 
-                : 'BİR TEKNOFEST YILDIRIM TAKIMINA YERLEŞTİNİZ! 🎉'}
+                : 'YILDIRIM TAKIMI KADROSUNA ASİL YERLEŞTİNİZ! 🎉'}
             </div>
             <div class="banner-subtext">
-              ${isMulti 
-                ? 'Tebrikler! Üstün yetenek ve hiperaktiviteniz dolayısıyla birden çok masada yetkilendirildiniz.' 
-                : '2026 Teknofest maratonunda Yıldırım Roket Takımı kadrosuna dahil oldunuz.'}
+              ${placementSubtext}
             </div>
           </div>
 
@@ -423,10 +426,10 @@
             <div class="rules-title">ADAYIN DİKKATİNE & İNTİBAK KURALLARI:</div>
             <ol>
               <li>Kayıt için adayların yanlarında en az 2 koli enerji içeceği, 1 adet lehim havyası ve sınırsız sabır getirmeleri gerekmektedir.</li>
-              <li>Rampa fırlatması esnasında geri sayımda 'Hocam bu uçar mı ya' demek kesinlikle yasaktır; soran olursa atölye zımparalama cezası verilir.</li>
-              <li>Takımdan ayrılmak isteyen adayların tazminat olarak takıma 1 adet katı yakıtlı roket motoru teslim etmesi zorunludur.</li>
+              <li>Atölyede ve testlerde geri sayım anında 'Hocam bu çalışır mı ya' demek kesinlikle yasaktır; soran olursa atölye zımparalama cezası verilir.</li>
+              <li>Takımdan ayrılmak isteyen adayların tazminat olarak takıma 1 adet yedek donanım parçası veya katı yakıt motoru teslim etmesi zorunludur.</li>
               <li>Sabahlama nöbetlerinde uyuyakalanların yüzüne termal macunla roket çizilecektir.</li>
-              <li>Bu sonuç belgesi TEKNOFEST atölyesinde, roket rampasında ve Instagram etiketlerinde geçerlidir.</li>
+              <li>Bu sonuç belgesi TEKNOFEST atölyesinde, sahada ve Instagram etiketlerinde geçerlidir.</li>
             </ol>
           </div>
 
@@ -438,11 +441,11 @@
             <div class="security-center">
               <div>Belge Doğrulama Kodu: <strong>${authCode}</strong></div>
               <div>Belge Oluşturulma Zamanı: <strong>${dateStr} ${timeStr}</strong></div>
-              <div>T.C. TEKNOFEST YILDIRIM ROKET TAKIMI RESMİ SONUÇ BELGESİDİR</div>
+              <div>T.C. TEKNOFEST YILDIRIM TAKIMI RESMİ SONUÇ BELGESİDİR</div>
             </div>
             <div class="official-red-stamp">
               <span>YILDIRIM</span>
-              <span>ROKET</span>
+              <span>TAKIMI</span>
               <span>ASLIDIR</span>
               <span>2026</span>
             </div>
