@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEKNOFEST Yıldırım Roket Takımı - ÖSYM Tercih Sonuç Ekranı</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Dynamic Cosmic Space Background -->
+  <div class="space-bg">
+    <div class="space-stars"></div>
+    <div class="floating-rockets">
+      <div class="floating-rocket">🚀</div>
+      <div class="floating-rocket">🛰️</div>
+      <div class="floating-rocket">🌊</div>
+    </div>
+  </div>
+
+  <div class="app-container">
+
+    <!-- Main Header -->
+    <header class="main-header">
+      <div class="header-brand">
+        <img src="logo.png" alt="Yıldırım Roket Takımı Logo" class="brand-logo-img" />
+        <div class="brand-text">
+          <h1>Yıldırım Roket Takımı</h1>
+          <span class="brand-badge">Teknofest 2026 • YSYM</span>
+        </div>
+      </div>
+      <p class="header-subtitle">Yıldırım Seçme ve Yerleştirme Merkezi - Tercih & Ekip Dağılımı Sonuç Sorgulama Sistemi</p>
+    </header>
+
+    <!-- Search Section -->
+    <main>
+      <section class="search-card">
+        <div class="osym-notice-banner">
+          <span class="icon">📢</span>
+          <div>
+            <strong>2026-TEKNOFEST YILDIRIM YERLEŞTİRME SONUÇLARI AÇIKLANMIŞTIR:</strong>
+            Adaylar yerleştirme sonuçlarını Ad ve Soyadları ile aşağıdaki ekrandan sorgulayabilirler.
+          </div>
+        </div>
+
+        <div class="search-form-group">
+          <label class="input-label" for="name-input">
+            <span>Aday Adı ve Soyadı</span>
+            <span style="font-size: 0.8rem; color: #94a3b8; font-weight: normal;">(Büyük/küçük harf veya Türkçe karakter duyarsız)</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔍</span>
+            <input 
+              type="text" 
+              id="name-input" 
+              class="search-input" 
+              placeholder="Adınızı ve soyadınızı giriniz (Örn: Emre Cebeci, Alpdoğan Kurt...)" 
+              autocomplete="off" 
+              autofocus 
+            />
+            <button type="button" id="clear-btn" class="clear-btn" title="Temizle">✕</button>
+            <div id="autocomplete-list" class="autocomplete-dropdown"></div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="query-btn" class="btn-query">
+            <span class="rocket-icon">🚀</span>
+            <span>Sonucu Sorgula</span>
+          </button>
+          <button type="button" id="open-roster-btn" class="btn-roster">
+            <span>📋</span>
+            <span>Tüm Takım Dağılım Listesi</span>
+          </button>
+        </div>
+
+        <!-- Quick Selection Chips -->
+        <div class="quick-chips-wrapper">
+          <div class="chips-title">
+            <span>⚡ Hızlı Seçim (Çoklu Masadakiler & Popüler Adaylar):</span>
+          </div>
+          <div class="chips-container">
+            <button type="button" class="chip-btn star" data-name="Emre Cebeci">👑 Emre Cebeci (4 Masada)</button>
+            <button type="button" class="chip-btn star" data-name="Alpdoğan Kurt">🔱 Alpdoğan Kurt (4 Masada)</button>
+            <button type="button" class="chip-btn star" data-name="Nurcan Baloğlu">🔩 Nurcan Baloğlu (4 Masada)</button>
+            <button type="button" class="chip-btn star" data-name="Batuhan Koç">⚡ Batuhan Koç (3 Masada)</button>
+            <button type="button" class="chip-btn" data-name="Salih Toker">🌊 Salih Toker</button>
+            <button type="button" class="chip-btn" data-name="Damla Güven">💻 Damla Güven</button>
+            <button type="button" class="chip-btn" data-name="Şebnem Kurt">🛰️ Şebnem Kurt</button>
+            <button type="button" class="chip-btn" data-name="Seher Yentür">📢 Seher Yentür</button>
+            <button type="button" class="chip-btn" data-name="Cahit Onur Enoğlu">🐬 Cahit Onur</button>
+            <button type="button" class="chip-btn" data-name="Sena Ceren Gökbeşe">🚀 Sena Ceren</button>
+            <button type="button" class="chip-btn" data-name="A. Mert Yeğen">🏊 Mert Yeğen</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Suspense Loading Screen -->
+      <section id="query-loading" class="query-loading">
+        <div class="rocket-loader">🚀</div>
+        <h3>ÖSYM Roket Sunucuları Sorgulanıyor...</h3>
+        <p>Telemetri ve yerleştirme kütükleri taranıyor, lütfen bekleyiniz.</p>
+      </section>
+
+      <!-- ÖSYM Result Document Section -->
+      <section id="result-section" class="result-section">
+        <!-- Rendered Document will be inserted here -->
+        <div id="osym-document-content"></div>
+
+        <!-- Controls Bar below Document -->
+        <div class="result-controls-bar">
+          <button type="button" id="print-doc-btn" class="control-btn print">
+            <span>🖨️</span>
+            <span>Belgeyi Yazdır / PDF İndir</span>
+          </button>
+          <button type="button" id="repeat-confetti-btn" class="control-btn confetti">
+            <span>🎉</span>
+            <span>Konfetiyi Patlat!</span>
+          </button>
+          <button type="button" id="sound-toggle-btn" class="control-btn sound">
+            <span>🔊</span>
+            <span>Ses: Açık</span>
+          </button>
+          <button type="button" id="new-search-btn" class="control-btn new-search">
+            <span>🔍</span>
+            <span>Yeni Sorgulama Yap</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- Full Team Roster Modal -->
+  <div id="roster-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>
+          <span>📋</span>
+          <span>Yıldırım Takımları Tam Üye Dağılımı</span>
+        </h2>
+        <button type="button" id="close-roster-btn" class="modal-close-btn">&times;</button>
+      </div>
+      <div id="modal-tabs" class="modal-tabs"></div>
+      <div class="modal-body">
+        <div id="roster-grid" class="roster-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="confetti.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
